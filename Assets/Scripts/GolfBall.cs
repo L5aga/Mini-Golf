@@ -9,16 +9,19 @@ public class GolfBall : MonoBehaviour
     public float decelerationRate = 0.1f;
     public float stopThreshold = 1f;
     public TextMeshProUGUI forceText;
+    public TextMeshProUGUI hitCounterText;
 
     private Rigidbody rb;
     private Vector3 hitDirection;
     private bool isCharging = false;
     private float currentForce;
+    private int hitCount = 0;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         UpdateForceText(0);
+        UpdateHitCounter();
     }
 
     void FixedUpdate()
@@ -63,6 +66,9 @@ public class GolfBall : MonoBehaviour
             rb.AddForce(hitDirection * currentForce, ForceMode.Impulse);
             currentForce = 0;
             UpdateForceText(0);
+            
+            hitCount++;
+            UpdateHitCounter();
         }
     }
 
@@ -71,6 +77,14 @@ public class GolfBall : MonoBehaviour
         if (forceText != null)
         {
             forceText.text = $"Force: {percentage:F0}%";
+        }
+    }
+
+    void UpdateHitCounter()
+    {
+        if (hitCounterText != null)
+        {
+            hitCounterText.text = $"Hits: {hitCount}";
         }
     }
 }
